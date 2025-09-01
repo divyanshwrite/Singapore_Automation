@@ -1,4 +1,85 @@
-# Singapore HSA Guidance Scraper & Database System
+# # Singapore HSA Document Automation
+
+This project automates the scraping and storage of regulatory documents from Singapore's Health Sciences Authority (HSA).
+
+## Features
+
+- Scrapes guidance documents for both therapeutic products and medical devices
+- Automatically extracts text from PDFs and Word documents
+- Stores documents and metadata in PostgreSQL database
+- Supports full-text search capabilities
+- Handles multiple document sections and categories
+
+## Setup
+
+1. Create a Python virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Set up PostgreSQL database:
+- Create a database named `quriousri`
+- Create a user named `fda_user` with appropriate permissions
+- Set up the `source.medical_guidelines` table
+
+4. Set environment variables:
+```bash
+export PGUSER='fda_user'
+export PGPASSWORD='your_password_here'
+```
+
+## Usage
+
+### Running the Scraper
+
+```bash
+python hsa_scraper_clean.py
+```
+
+To only clear the database without scraping:
+```bash
+python hsa_scraper_clean.py --clear-only
+```
+
+### Searching Documents
+
+The `search_queries.sql` file contains example queries for:
+- Finding documents by product type
+- Full-text search in document content
+- Searching by section/category
+- Finding recently updated documents
+- Complex searches combining multiple criteria
+
+## Database Schema
+
+Documents are stored in the `source.medical_guidelines` table with fields:
+- title
+- summary
+- link_guidance (original URL)
+- link_file (local file path)
+- products (Medical Device/Drugs)
+- country (Singapore)
+- agency (HSA)
+- json_data (contains section information)
+- all_text (extracted document content)
+- created_at/updated_at timestamps
+
+## Testing 
+
+Run tests with:
+```bash
+python -m pytest tests/
+```
+
+## License
+
+MIT License
 
 Production-grade ingestion and search for all guidance documents from Singapore Health Sciences Authority (HSA).
 
